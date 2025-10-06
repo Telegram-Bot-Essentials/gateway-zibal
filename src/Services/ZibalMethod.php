@@ -2,7 +2,9 @@
 
 namespace TelegramBotEssentials\GatewayZibal\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
+use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 
 abstract class ZibalMethod
 {
@@ -14,9 +16,17 @@ abstract class ZibalMethod
 
     }
 
+    /**
+     * @throws FeatureIsDisabled
+     * @throws ConnectionException
+     */
     public function execute()
     {
-        $this->data['merchant'] = wHook()->bot()->settings->zibal_merchant;
+        $status = settings()->get('billing.gateways.zibal.status');
+        $merchant = settings()->get('billing.gateways.zibal.merchant');
+        dependsOn($status);
+        dependsOn($merchant);
+        $this->data['merchant'] = $merchant;
         $result = HTTP::withHeaders([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',

@@ -1,5 +1,5 @@
 {
-    "name": "telegram-bot-essentials/tbe-gateway-zibal",
+    "name": "telegram-bot-essentials/gateway-zibal",
     "version": "0.0.1",
     "description": "tbe-billing gateway support for zibal built for telegram-bot-essentials/essence",
     "type": "library",
@@ -7,13 +7,17 @@
         "php": "^8.2",
         "laravel/framework": "^12",
         "telegram-bot-essentials/billing": "*",
-        "telegram-bot-essentials/essence": "*"
+        "telegram-bot-essentials/essence": "*",
+        "telegram-bot-essentials/settings": "*"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
             "TelegramBotEssentials\\GatewayZibal\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {
@@ -30,6 +34,10 @@
         {
             "type": "path",
             "url": "../tbe-billing"
+        },
+        {
+            "type": "path",
+            "url": "../tbe-settings"
         }
     ],
     "extra": {
