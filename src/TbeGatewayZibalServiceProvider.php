@@ -78,14 +78,12 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
             key: 'billing.gateways.zibal.status',
             label: 'Zibal Status',
             type: SettingType::CHECKBOX,
-            default: true,
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways.zibal.merchant',
             label: 'Zibal Merchant',
             type: SettingType::SENSITIVE,
-            default: 'zibal',
         ));
     }
 
