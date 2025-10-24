@@ -55,6 +55,8 @@
     </style>
 </head>
 <body>
+
+
 <div class="container">
     @if ($success)
         <h1 class="success">✅ Payment Successful</h1>

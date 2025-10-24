@@ -2,7 +2,10 @@
 
 namespace TelegramBotEssentials\GatewayZibal\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
@@ -48,6 +51,11 @@ class GatewayZibalController extends Controller
     }
 
     /**
+     * @param string $token
+     * @param Request $request
+     * @return Factory|View|JsonResponse|\Illuminate\View\View
+     * @throws ConnectionException
+     * @throws FeatureIsDisabled
      * @throws TelegramSDKException
      * @throws TenantCouldNotBeIdentifiedById
      */
@@ -74,6 +82,14 @@ class GatewayZibalController extends Controller
         }
 
         $botLink = 'https://t.me/' . $username . '?start=invoice_' . $invoice->id;
+
+        if($invoice->status == 'paid'){
+            return view('tbe-gateway-zibal::result', [
+                'success' => 1,
+                'invoice' => $invoice,
+                'botLink' => $botLink,
+            ]);
+        }
 
         if(($result['status'] ?? null) != 1) {
             Log::error($result['message'] ?? 'error message is not provided');
