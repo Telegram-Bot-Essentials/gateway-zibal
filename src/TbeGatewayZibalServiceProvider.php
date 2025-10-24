@@ -93,6 +93,8 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
             key: 'zibal',
             label: 'Zibal',
             inlineButtonGenerator: function (Invoice $invoice) {
+                if(!settings()->get('billing.gateways.zibal.status') || !settings()->get('billing.gateways.zibal.merchant'))
+                    return null;
                 return Keyboard::inlineButton([
                     'text' => __('tbe-billing::invoice.summary.keys.to_zibal', [
                         'price' => number_format(priceIn($invoice->price)->toIRT())

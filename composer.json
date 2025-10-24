@@ -1,6 +1,5 @@
 {
     "name": "telegram-bot-essentials/gateway-zibal",
-    "version": "0.0.2",
     "description": "tbe-billing gateway support for zibal built for telegram-bot-essentials/essence",
     "type": "library",
     "require": {
