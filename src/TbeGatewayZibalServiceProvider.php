@@ -27,11 +27,12 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
     {
         $this->registerPublishing();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-gateway-zibal');
-
         Route::prefix('')
             ->group(__DIR__ . '/../routes/web.php');
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tbe-gateway-zibal');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-gateway-zibal');
 
         callbackQueryBus()->addCallbackQueries([
 

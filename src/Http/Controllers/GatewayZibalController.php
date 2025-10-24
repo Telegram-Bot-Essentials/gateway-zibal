@@ -64,22 +64,6 @@ class GatewayZibalController extends Controller
 
         $result = zibal()->verify($request->input('trackId'))->execute();
 
-        if(($result['status'] ?? null) != 1) {
-            Log::error($result['message'] ?? 'error message is not provided');
-            return apiResponse()->error('failed to pay');
-        }
-
-        if(!($invoice->paymentAttempt instanceof ToZibalAttempt)
-            || !($invoice->paymentAttempt instanceof PaymentAttempt))
-            return apiResponse()->error('Failed to handle payment', 503);
-
-        $zibalAttempt = $invoice->paymentAttempt;
-        $zibalAttempt->update([
-            'received_amount' => $result['amount'],
-        ]);
-
-        $zibalAttempt->attemptSucceed();
-
         try {
             $api = new Api($invoice->bot->bot_token);
             $me = $api->getMe();
@@ -90,7 +74,36 @@ class GatewayZibalController extends Controller
         }
 
         $botLink = 'https://t.me/' . $username . '?start=invoice_' . $invoice->id;
-        return view('tbe::app', [
+
+        if(($result['status'] ?? null) != 1) {
+            Log::error($result['message'] ?? 'error message is not provided');
+            return view('tbe-gateway-zibal::result', [
+                'success' => 0,
+                'invoice' => $invoice,
+                'botLink' => $botLink,
+            ]);
+        }
+
+        if(
+            !($invoice->paymentAttempt instanceof ToZibalAttempt) ||
+            !($invoice->paymentAttempt instanceof PaymentAttempt)
+        ) {
+            return view('tbe-gateway-zibal::result', [
+                'success' => 0,
+                'invoice' => $invoice,
+                'botLink' => $botLink,
+            ]);
+        }
+
+        $zibalAttempt = $invoice->paymentAttempt;
+        $zibalAttempt->update([
+            'received_amount' => $result['amount'],
+        ]);
+
+        $zibalAttempt->attemptSucceed();
+
+
+        return view('tbe-gateway-zibal::result', [
             'success' => 1,
             'invoice' => $invoice,
             'botLink' => $botLink,
