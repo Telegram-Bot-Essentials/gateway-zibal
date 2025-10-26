@@ -5,9 +5,9 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12",
-        "telegram-bot-essentials/billing": "^0.0.1",
-        "telegram-bot-essentials/essence": "^0.8.0",
-        "telegram-bot-essentials/settings": "^0.0.1"
+        "telegram-bot-essentials/billing": "*",
+        "telegram-bot-essentials/essence": "*",
+        "telegram-bot-essentials/settings": "*"
     },
     "license": "MIT",
     "autoload": {
