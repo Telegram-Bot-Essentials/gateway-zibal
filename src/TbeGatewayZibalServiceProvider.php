@@ -59,31 +59,32 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
     {
         settings()->addSetting(new Setting(
             key: 'billing',
-            label: 'Billing',
+            label: fn () => __('tbe-gateway-zibal::settings.labels.billing'),
             type: SettingType::DIRECTORY,
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways',
-            label: 'Gateways',
+            label: fn () => __('tbe-gateway-zibal::settings.labels.gateways'),
             type: SettingType::DIRECTORY,
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways.zibal',
-            label: 'Zibal',
+            label: fn () => __('tbe-gateway-zibal::settings.labels.zibal'),
             type: SettingType::DIRECTORY,
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways.zibal.status',
-            label: 'Zibal Status',
+            label: fn () => __('tbe-gateway-zibal::settings.labels.status'),
             type: SettingType::CHECKBOX,
+            default: false,
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways.zibal.merchant',
-            label: 'Zibal Merchant',
+            label: fn () => __('tbe-gateway-zibal::settings.labels.merchant'),
             type: SettingType::SENSITIVE,
         ));
     }
