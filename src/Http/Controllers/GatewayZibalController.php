@@ -8,7 +8,6 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Log;
 use Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedById;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -36,13 +35,23 @@ class GatewayZibalController extends Controller
         $result = zibal()->paymentRequest($priceInRial, route('invoice.zibal.callback', ['token' => $token]))->execute();
 
         if($result['result'] != 100) {
-            Log::error($result['message'] ?? 'error message is not provided');
+            tbeLog('gateway-zibal')->warning('Zibal rejected payment request: ' . ($result['message'] ?? 'error message is not provided'), [
+                'invoice_id' => $invoice->getKey(),
+                'result_code' => $result['result'] ?? null,
+                'amount' => $priceInRial,
+            ]);
             return apiResponse()->error('failed to pay');
         }
 
         $zibalAttempt = ToZibalAttempt::create([
             'track_id' => $result['trackId'],
             'amount' => $priceInRial
+        ]);
+
+        tbeLog('gateway-zibal')->info('Zibal payment initiated', [
+            'invoice_id' => $invoice->getKey(),
+            'track_id' => $zibalAttempt->track_id,
+            'amount' => $priceInRial,
         ]);
 
         billing()->attemptPayment($invoice, $zibalAttempt);
@@ -77,7 +86,7 @@ class GatewayZibalController extends Controller
             $me = $api->getMe();
             $username = $me->username;
         } catch (TelegramSDKException $e) {
-            Log::error($e->getMessage());
+            tbeLog('gateway-zibal')->error('Failed to resolve bot username for payment redirect: ' . $e->getMessage(), ['exception' => $e, 'invoice_id' => $invoice->getKey()]);
             return apiResponse()->error('Payment was successful, but unable to redirect to Telegram', 200);
         }
 
@@ -92,7 +101,11 @@ class GatewayZibalController extends Controller
         }
 
         if(($result['status'] ?? null) != 1) {
-            Log::error($result['message'] ?? 'error message is not provided');
+            tbeLog('gateway-zibal')->warning('Zibal verify failed: ' . ($result['message'] ?? 'error message is not provided'), [
+                'invoice_id' => $invoice->getKey(),
+                'track_id' => $request->input('trackId'),
+                'status' => $result['status'] ?? null,
+            ]);
             return view('tbe-gateway-zibal::result', [
                 'success' => 0,
                 'invoice' => $invoice,
@@ -117,6 +130,12 @@ class GatewayZibalController extends Controller
         ]);
 
         $zibalAttempt->attemptSucceed();
+
+        tbeLog('gateway-zibal')->info('Zibal payment verified', [
+            'invoice_id' => $invoice->getKey(),
+            'track_id' => $zibalAttempt->track_id,
+            'received_amount' => $result['amount'],
+        ]);
 
 
         return view('tbe-gateway-zibal::result', [
