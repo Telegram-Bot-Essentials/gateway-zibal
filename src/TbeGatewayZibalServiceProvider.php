@@ -61,18 +61,21 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
             key: 'billing',
             label: fn () => __('tbe-gateway-zibal::settings.labels.billing'),
             type: SettingType::DIRECTORY,
+            description: fn () => __('tbe-gateway-zibal::settings.descriptions.billing'),
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways',
             label: fn () => __('tbe-gateway-zibal::settings.labels.gateways'),
             type: SettingType::DIRECTORY,
+            description: fn () => __('tbe-gateway-zibal::settings.descriptions.gateways'),
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways.zibal',
             label: fn () => __('tbe-gateway-zibal::settings.labels.zibal'),
             type: SettingType::DIRECTORY,
+            description: fn () => __('tbe-gateway-zibal::settings.descriptions.zibal'),
         ));
 
         settings()->addSetting(new Setting(
@@ -80,12 +83,14 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
             label: fn () => __('tbe-gateway-zibal::settings.labels.status'),
             type: SettingType::CHECKBOX,
             default: false,
+            description: fn () => __('tbe-gateway-zibal::settings.descriptions.status'),
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.gateways.zibal.merchant',
             label: fn () => __('tbe-gateway-zibal::settings.labels.merchant'),
             type: SettingType::SENSITIVE,
+            description: fn () => __('tbe-gateway-zibal::settings.descriptions.merchant'),
         ));
     }
 
