@@ -40,7 +40,7 @@ class GatewayZibalController extends Controller
                 'result_code' => $result['result'] ?? null,
                 'amount' => $priceInRial,
             ]);
-            return apiResponse()->error('failed to pay');
+            return tbeApiResponse()->error('failed to pay');
         }
 
         $zibalAttempt = ToZibalAttempt::create([
@@ -87,7 +87,7 @@ class GatewayZibalController extends Controller
             $username = $me->username;
         } catch (TelegramSDKException $e) {
             tbeLog('gateway-zibal')->error('Failed to resolve bot username for payment redirect: ' . $e->getMessage(), ['exception' => $e, 'invoice_id' => $invoice->getKey()]);
-            return apiResponse()->error('Payment was successful, but unable to redirect to Telegram', 200);
+            return tbeApiResponse()->error('Payment was successful, but unable to redirect to Telegram', 200);
         }
 
         $botLink = 'https://t.me/' . $username . '?start=invoice_' . $invoice->id;
