@@ -3,9 +3,6 @@ includes:
     - phpstan-baseline.neon
 
 parameters:
-    bootstrapFiles:
-        - phpstan-bootstrap.php
-
     paths:
         - src
         - database
