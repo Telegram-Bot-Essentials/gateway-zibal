@@ -5495,16 +5495,16 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v3.7.1",
+            "version": "v3.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "c0a284bab1ed8aa0417e3d69250ab437739563a0"
+                "reference": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/c0a284bab1ed8aa0417e3d69250ab437739563a0",
-                "reference": "c0a284bab1ed8aa0417e3d69250ab437739563a0",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/15e6a07ec2a2c75ceb1b21dd98105ee8456d2257",
+                "reference": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257",
                 "shasum": ""
             },
             "require": {
@@ -5558,7 +5558,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/service-contracts/tree/v3.7.1"
+                "source": "https://github.com/symfony/service-contracts/tree/v3.7.3"
             },
             "funding": [
                 {
@@ -5578,7 +5578,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-16T09:55:08+00:00"
+            "time": "2026-07-27T15:39:01+00:00"
         },
         {
             "name": "symfony/string",
@@ -6069,12 +6069,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Elyar0/telegram-bot-essentials.git",
-                "reference": "48bf24a523f9e0af7515eccb007db21de1373134"
+                "reference": "6c5ef77e771a64c75eef8674c064fef7e14d4b61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/48bf24a523f9e0af7515eccb007db21de1373134",
-                "reference": "48bf24a523f9e0af7515eccb007db21de1373134",
+                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/6c5ef77e771a64c75eef8674c064fef7e14d4b61",
+                "reference": "6c5ef77e771a64c75eef8674c064fef7e14d4b61",
                 "shasum": ""
             },
             "require": {
@@ -6178,7 +6178,7 @@
                 "source": "https://github.com/Elyar0/telegram-bot-essentials/tree/chore/phase-0-hygiene",
                 "issues": "https://github.com/Elyar0/telegram-bot-essentials/issues"
             },
-            "time": "2026-08-29T10:46:11+00:00"
+            "time": "2026-08-30T19:11:24+00:00"
         },
         {
             "name": "telegram-bot-essentials/settings",
