@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('track_id');
             $table->decimal('amount', 65, 30);
-            $table->decimal('received_amount',65, 30)->nullable();
+            $table->decimal('received_amount', 65, 30)->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

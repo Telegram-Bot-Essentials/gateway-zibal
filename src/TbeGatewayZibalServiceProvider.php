@@ -14,10 +14,7 @@ use TelegramBotEssentials\Settings\Enums\SettingType;
 
 class TbeGatewayZibalServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-
-    }
+    public function register(): void {}
 
     /**
      * @throws LogicException
@@ -28,11 +25,11 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
         $this->registerPublishing();
 
         Route::prefix('')
-            ->group(__DIR__ . '/../routes/web.php');
+            ->group(__DIR__.'/../routes/web.php');
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tbe-gateway-zibal');
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-gateway-zibal');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'tbe-gateway-zibal');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-gateway-zibal');
 
         callbackQueryBus()->addCallbackQueries([
 
@@ -50,7 +47,7 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../lang' => resource_path('lang/vendor/tbe-gateway-zibal'),
+                __DIR__.'/../lang' => resource_path('lang/vendor/tbe-gateway-zibal'),
             ], 'tbe-gateway-zibal-translations');
         }
     }
@@ -100,13 +97,15 @@ class TbeGatewayZibalServiceProvider extends ServiceProvider
             key: 'zibal',
             label: 'Zibal',
             inlineButtonGenerator: function (Invoice $invoice) {
-                if(!settings()->get('billing.gateways.zibal.status') || !settings()->get('billing.gateways.zibal.merchant'))
+                if (! settings()->get('billing.gateways.zibal.status') || ! settings()->get('billing.gateways.zibal.merchant')) {
                     return null;
+                }
+
                 return Keyboard::inlineButton([
                     'text' => __('tbe-billing::invoice.summary.keys.to_zibal', [
-                        'price' => number_format(priceIn($invoice->price)->toIRT())
+                        'price' => number_format(priceIn($invoice->price)->toIRT()),
                     ]),
-                    'url' => route('invoice.zibal.pay', ['token' => $invoice->public_token])
+                    'url' => route('invoice.zibal.pay', ['token' => $invoice->public_token]),
                 ]);
             }
         ));
