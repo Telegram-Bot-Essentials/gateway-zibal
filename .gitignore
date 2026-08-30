@@ -6,3 +6,7 @@
 /.vscode
 /.zed
 .env.testing
+# Test and analysis artefacts.
+/.phpunit.cache
+/.phpunit.result.cache
+/build
