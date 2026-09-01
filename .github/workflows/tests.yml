@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
 
+env:
+  # Read access to the private telegram-bot-essentials/* repos so composer
+  # can resolve the essence dependency.
+  COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.COMPOSER_AUTH_TOKEN }}"}}'
+
 jobs:
   tests:
     runs-on: ubuntu-latest
