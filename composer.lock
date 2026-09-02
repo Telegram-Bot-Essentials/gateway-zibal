@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aed47544c39f10befbcf3ce03ddae364",
+    "content-hash": "3f23bdb8bc29548f634a2f4f4a622339",
     "packages": [
         {
             "name": "brick/math",
@@ -1195,16 +1195,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v13.29.0",
+            "version": "v13.30.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6e2c363716964d8238cee7097b258119a984f0cf"
+                "reference": "718d17db56861e0a49f644217c8853dab1bff8ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6e2c363716964d8238cee7097b258119a984f0cf",
-                "reference": "6e2c363716964d8238cee7097b258119a984f0cf",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/718d17db56861e0a49f644217c8853dab1bff8ce",
+                "reference": "718d17db56861e0a49f644217c8853dab1bff8ce",
                 "shasum": ""
             },
             "require": {
@@ -1418,7 +1418,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-08-25T20:57:16+00:00"
+            "time": "2026-09-01T21:42:30+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -1790,16 +1790,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.35.3",
+            "version": "3.36.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "5fc8404762179ae514678487b23494fd69b2309c"
+                "reference": "f7fb152932f30072d573510cbd4dd657d6475b25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/5fc8404762179ae514678487b23494fd69b2309c",
-                "reference": "5fc8404762179ae514678487b23494fd69b2309c",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/f7fb152932f30072d573510cbd4dd657d6475b25",
+                "reference": "f7fb152932f30072d573510cbd4dd657d6475b25",
                 "shasum": ""
             },
             "require": {
@@ -1867,9 +1867,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.35.3"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.36.0"
             },
-            "time": "2026-08-22T12:55:54+00:00"
+            "time": "2026-09-02T08:00:27+00:00"
         },
         {
             "name": "league/flysystem-local",
@@ -5954,12 +5954,12 @@
             "version": "v0.0.32",
             "source": {
                 "type": "git",
-                "url": "git@github.com:Elyar0/tbe-billing.git",
+                "url": "https://github.com/Telegram-Bot-Essentials/billing.git",
                 "reference": "8474e67f8a8d816f54f84261b62391025a404eb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elyar0/tbe-billing/zipball/8474e67f8a8d816f54f84261b62391025a404eb7",
+                "url": "https://api.github.com/repos/Telegram-Bot-Essentials/billing/zipball/8474e67f8a8d816f54f84261b62391025a404eb7",
                 "reference": "8474e67f8a8d816f54f84261b62391025a404eb7",
                 "shasum": ""
             },
@@ -5985,53 +5985,14 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "TelegramBotEssentials\\Billing\\": "src/"
-                },
                 "files": [
                     "src/helpers.php"
-                ]
-            },
-            "autoload-dev": {
+                ],
                 "psr-4": {
-                    "TelegramBotEssentials\\Billing\\Tests\\": "tests/",
-                    "Workbench\\App\\": "workbench/app/",
-                    "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-                    "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+                    "TelegramBotEssentials\\Billing\\": "src/"
                 }
             },
-            "scripts": {
-                "test": [
-                    "pest"
-                ],
-                "lint": [
-                    "pint --test"
-                ],
-                "format": [
-                    "pint"
-                ],
-                "analyse": [
-                    "phpstan analyse"
-                ],
-                "post-autoload-dump": [
-                    "@clear",
-                    "@prepare"
-                ],
-                "clear": [
-                    "@php vendor/bin/testbench package:purge-skeleton --ansi"
-                ],
-                "prepare": [
-                    "@php vendor/bin/testbench package:discover --ansi"
-                ],
-                "build": [
-                    "@php vendor/bin/testbench workbench:build --ansi"
-                ],
-                "serve": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "@build",
-                    "@php vendor/bin/testbench serve --ansi"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6042,20 +6003,24 @@
                 }
             ],
             "description": "Invoices, payments and a pluggable gateway registry for telegram-bot-essentials/essence",
-            "time": "2026-09-01T11:53:03+00:00"
+            "support": {
+                "issues": "https://github.com/Telegram-Bot-Essentials/billing/issues",
+                "source": "https://github.com/Telegram-Bot-Essentials/billing/tree/v0.0.32"
+            },
+            "time": "2026-09-01T12:08:24+00:00"
         },
         {
             "name": "telegram-bot-essentials/essence",
             "version": "v0.12.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:Elyar0/telegram-bot-essentials.git",
-                "reference": "1bc114ab7d402f1241e0539088ae6d0e5a1921d3"
+                "url": "https://github.com/Telegram-Bot-Essentials/essence.git",
+                "reference": "b0f2978abe79f1ac480ebdc08d8d23417dbc80f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/1bc114ab7d402f1241e0539088ae6d0e5a1921d3",
-                "reference": "1bc114ab7d402f1241e0539088ae6d0e5a1921d3",
+                "url": "https://api.github.com/repos/Telegram-Bot-Essentials/essence/zipball/b0f2978abe79f1ac480ebdc08d8d23417dbc80f2",
+                "reference": "b0f2978abe79f1ac480ebdc08d8d23417dbc80f2",
                 "shasum": ""
             },
             "require": {
@@ -6085,56 +6050,17 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "TelegramBotEssentials\\Essence\\": "src/"
-                },
                 "files": [
                     "src/helpers.php"
                 ],
+                "psr-4": {
+                    "TelegramBotEssentials\\Essence\\": "src/"
+                },
                 "classmap": [
                     "database/factories"
                 ]
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "TelegramBotEssentials\\Essence\\Tests\\": "tests/",
-                    "Workbench\\App\\": "workbench/app/",
-                    "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-                    "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "pest"
-                ],
-                "lint": [
-                    "pint --test"
-                ],
-                "format": [
-                    "pint"
-                ],
-                "analyse": [
-                    "phpstan analyse"
-                ],
-                "post-autoload-dump": [
-                    "@clear",
-                    "@prepare"
-                ],
-                "clear": [
-                    "@php vendor/bin/testbench package:purge-skeleton --ansi"
-                ],
-                "prepare": [
-                    "@php vendor/bin/testbench package:discover --ansi"
-                ],
-                "build": [
-                    "@php vendor/bin/testbench workbench:build --ansi"
-                ],
-                "serve": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "@build",
-                    "@php vendor/bin/testbench serve --ansi"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6152,19 +6078,23 @@
                 "telegram",
                 "telegram-bot"
             ],
-            "time": "2026-09-01T11:38:42+00:00"
+            "support": {
+                "issues": "https://github.com/Telegram-Bot-Essentials/essence/issues",
+                "source": "https://github.com/Telegram-Bot-Essentials/essence/tree/v0.12.0"
+            },
+            "time": "2026-09-02T07:49:07+00:00"
         },
         {
             "name": "telegram-bot-essentials/settings",
             "version": "v0.0.17",
             "source": {
                 "type": "git",
-                "url": "git@github.com:Elyar0/tbe-settings.git",
+                "url": "https://github.com/Telegram-Bot-Essentials/settings.git",
                 "reference": "f1692fe7c69b74da508d41dbe447f33d00a3b0a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elyar0/tbe-settings/zipball/f1692fe7c69b74da508d41dbe447f33d00a3b0a6",
+                "url": "https://api.github.com/repos/Telegram-Bot-Essentials/settings/zipball/f1692fe7c69b74da508d41dbe447f33d00a3b0a6",
                 "reference": "f1692fe7c69b74da508d41dbe447f33d00a3b0a6",
                 "shasum": ""
             },
@@ -6189,53 +6119,14 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "TelegramBotEssentials\\Settings\\": "src/"
-                },
                 "files": [
                     "src/helpers.php"
-                ]
-            },
-            "autoload-dev": {
+                ],
                 "psr-4": {
-                    "TelegramBotEssentials\\Settings\\Tests\\": "tests/",
-                    "Workbench\\App\\": "workbench/app/",
-                    "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-                    "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+                    "TelegramBotEssentials\\Settings\\": "src/"
                 }
             },
-            "scripts": {
-                "test": [
-                    "pest"
-                ],
-                "lint": [
-                    "pint --test"
-                ],
-                "format": [
-                    "pint"
-                ],
-                "analyse": [
-                    "phpstan analyse"
-                ],
-                "post-autoload-dump": [
-                    "@clear",
-                    "@prepare"
-                ],
-                "clear": [
-                    "@php vendor/bin/testbench package:purge-skeleton --ansi"
-                ],
-                "prepare": [
-                    "@php vendor/bin/testbench package:discover --ansi"
-                ],
-                "build": [
-                    "@php vendor/bin/testbench workbench:build --ansi"
-                ],
-                "serve": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "@build",
-                    "@php vendor/bin/testbench serve --ansi"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6246,6 +6137,10 @@
                 }
             ],
             "description": "Per-bot typed key/value settings for telegram-bot-essentials/essence",
+            "support": {
+                "issues": "https://github.com/Telegram-Bot-Essentials/settings/issues",
+                "source": "https://github.com/Telegram-Bot-Essentials/settings/tree/v0.0.17"
+            },
             "time": "2026-09-01T11:50:15+00:00"
         },
         {
@@ -7176,20 +7071,19 @@
         },
         {
             "name": "larastan/larastan",
-            "version": "v3.10.0",
+            "version": "v3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larastan/larastan.git",
-                "reference": "2970f83398154178a739609c244577267c7ee8eb"
+                "reference": "9baa74074f17cc70feaef31616a06ea0faeebba5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/2970f83398154178a739609c244577267c7ee8eb",
-                "reference": "2970f83398154178a739609c244577267c7ee8eb",
+                "url": "https://api.github.com/repos/larastan/larastan/zipball/9baa74074f17cc70feaef31616a06ea0faeebba5",
+                "reference": "9baa74074f17cc70feaef31616a06ea0faeebba5",
                 "shasum": ""
             },
             "require": {
-                "ext-json": "*",
                 "iamcal/sql-parser": "^0.7.0",
                 "illuminate/console": "^11.44.2 || ^12.4.1 || ^13",
                 "illuminate/container": "^11.44.2 || ^12.4.1 || ^13",
@@ -7199,7 +7093,7 @@
                 "illuminate/pipeline": "^11.44.2 || ^12.4.1 || ^13",
                 "illuminate/support": "^11.44.2 || ^12.4.1 || ^13",
                 "php": "^8.2",
-                "phpstan/phpstan": "^2.2.0"
+                "phpstan/phpstan": "^2.2.2"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^14",
@@ -7209,7 +7103,7 @@
                 "orchestra/canvas": "^v9.2.2 || ^10.0.1 || ^11",
                 "orchestra/testbench-core": "^9.12.0 || ^10.1 || ^11",
                 "phpstan/phpstan-deprecation-rules": "^2.0.1",
-                "phpunit/phpunit": "^10.5.35 || ^11.5.15 || ^12.5.8 || ^13.1.8"
+                "phpunit/phpunit": "^10.5.35 || ^11.5.15 || ^12.5.8 || ^13.3.0"
             },
             "suggest": {
                 "orchestra/testbench": "Using Larastan for analysing a package needs Testbench",
@@ -7254,7 +7148,7 @@
             ],
             "support": {
                 "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/v3.10.0"
+                "source": "https://github.com/larastan/larastan/tree/v3.11.0"
             },
             "funding": [
                 {
@@ -7262,7 +7156,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-28T08:00:58+00:00"
+            "time": "2026-09-01T16:35:48+00:00"
         },
         {
             "name": "laravel/pail",
