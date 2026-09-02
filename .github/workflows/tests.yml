@@ -6,9 +6,9 @@ on:
   pull_request:
 
 env:
-  # Read access to the private telegram-bot-essentials/* repos so composer
-  # can resolve the essence dependency.
-  COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.COMPOSER_AUTH_TOKEN }}"}}'
+  # GITHUB_TOKEN raises the GitHub API rate limit so composer can resolve
+  # the sibling telegram-bot-essentials/* VCS repos. Removed once they are on Packagist.
+  COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}'
 
 jobs:
   tests:

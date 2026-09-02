@@ -28,15 +28,15 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Elyar0/telegram-bot-essentials"
+            "url": "https://github.com/Telegram-Bot-Essentials/essence"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/Elyar0/tbe-billing"
+            "url": "https://github.com/Telegram-Bot-Essentials/billing"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/Elyar0/tbe-settings"
+            "url": "https://github.com/Telegram-Bot-Essentials/settings"
         }
     ],
     "extra": {
