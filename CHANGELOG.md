@@ -6,6 +6,14 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.12] - 2026-09-20
+
+### Changed
+
+- **BREAKING:** requires `telegram-bot-essentials/essence` `^0.13` (the JSON user
+  state and the forms engine). No code change: the package's suite passes
+  against essence 0.13.0.
+
 ## [0.0.11] - 2026-09-01
 
 ### Changed
