@@ -151,7 +151,7 @@ parameters:
 			path: src/Services/ZibalMethod.php
 
 		-
-			message: '#^Parameter \#2 \$data of method Illuminate\\Http\\Client\\PendingRequest\<false\>\:\:post\(\) expects array\<int\<0, max\>\|string, mixed\>\|Illuminate\\Contracts\\Support\\Arrayable\<string, mixed\>\|JsonSerializable, non\-empty\-array given\.$#'
+			message: '#^Parameter \#2 \$data of method Illuminate\\Http\\Client\\PendingRequest\<false\>\:\:post\(\) expects array\<int\<0, max\>\|string, mixed\>\|object\|null, non\-empty\-array given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/ZibalMethod.php
