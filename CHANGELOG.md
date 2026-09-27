@@ -6,6 +6,21 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- Requires essence `^0.15` for `adminAlert()` and `tbeLog()->for()`.
+- Zibal refusing a payment because of the merchant id (codes 102-104:
+  unknown, inactive, invalid) alerts the owner and admins (throttled): no
+  member can pay through Zibal until it is fixed.
+- Log messages name the invoice, track id and amount, and are bound to the
+  invoice's user, since the pay and callback requests come from a browser
+  rather than a Telegram update.
+
+### Fixed
+
+- The pay and callback routes built their Telegram client with `new Api()`,
+  bypassing essence's `telegramApi()` and its HTTP client.
+
 ## [0.0.13] - 2026-09-22
 
 ### Changed
