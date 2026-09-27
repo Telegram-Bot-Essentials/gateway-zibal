@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedById;
-use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use Telegram\Bot\Objects\Update;
 use TelegramBotEssentials\Billing\Models\Abstract\PaymentAttempt;
@@ -34,12 +33,24 @@ class GatewayZibalController extends Controller
 
         $result = zibal()->paymentRequest($priceInRial, route('invoice.zibal.callback', ['token' => $token]))->execute();
 
-        if ($result['result'] != 100) {
-            tbeLog('gateway-zibal')->warning('Zibal rejected payment request: '.($result['message'] ?? 'error message is not provided'), [
+        $code = $this->field($result, 'result');
+        if ($code !== '100') {
+            $zibalMessage = $this->field($result, 'message') ?? 'no message';
+            tbeLog('gateway-zibal')->for($invoice->botUser)->warning('Zibal refused to start payment of invoice #{invoice_id} ({amount} IRR): [{result_code}] {zibal_message}', [
                 'invoice_id' => $invoice->getKey(),
-                'result_code' => $result['result'] ?? null,
+                'result_code' => $code,
+                'zibal_message' => $zibalMessage,
                 'amount' => $priceInRial,
             ]);
+
+            // 102-104: the merchant id is unknown, inactive or invalid - no
+            // member can pay through Zibal until the owner fixes it.
+            if (in_array($code, ['102', '103', '104'], true)) {
+                adminAlert('gateway-zibal.merchant', fn () => __('tbe-gateway-zibal::settings.alerts.merchant', [
+                    'code' => $code,
+                    'message' => $zibalMessage,
+                ]));
+            }
 
             return tbeApiResponse()->error('failed to pay');
         }
@@ -49,7 +60,7 @@ class GatewayZibalController extends Controller
             'amount' => $priceInRial,
         ]);
 
-        tbeLog('gateway-zibal')->info('Zibal payment initiated', [
+        tbeLog('gateway-zibal')->for($invoice->botUser)->info('Zibal payment {track_id} started for invoice #{invoice_id}: {amount} IRR', [
             'invoice_id' => $invoice->getKey(),
             'track_id' => $zibalAttempt->track_id,
             'amount' => $priceInRial,
@@ -82,11 +93,11 @@ class GatewayZibalController extends Controller
         $result = zibal()->verify($request->input('trackId'))->execute();
 
         try {
-            $api = new Api($invoice->bot->bot_token);
+            $api = telegramApi($this->botToken($invoice));
             $me = $api->getMe();
             $username = $me->username;
         } catch (TelegramSDKException $e) {
-            tbeLog('gateway-zibal')->error('Failed to resolve bot username for payment redirect: '.$e->getMessage(), ['exception' => $e, 'invoice_id' => $invoice->getKey()]);
+            tbeLog('gateway-zibal')->for($invoice->botUser)->error('Invoice #{invoice_id} paid, but the bot username for the redirect could not be resolved: '.$e->getMessage(), ['exception' => $e, 'invoice_id' => $invoice->getKey()]);
 
             return tbeApiResponse()->error('Payment was successful, but unable to redirect to Telegram', 200);
         }
@@ -102,8 +113,9 @@ class GatewayZibalController extends Controller
         }
 
         if (($result['status'] ?? null) != 1) {
-            tbeLog('gateway-zibal')->warning('Zibal verify failed: '.($result['message'] ?? 'error message is not provided'), [
+            tbeLog('gateway-zibal')->for($invoice->botUser)->warning('Zibal did not verify payment {track_id} of invoice #{invoice_id}: [{status}] {zibal_message}', [
                 'invoice_id' => $invoice->getKey(),
+                'zibal_message' => $this->field($result, 'message') ?? 'no message',
                 'track_id' => $request->input('trackId'),
                 'status' => $result['status'] ?? null,
             ]);
@@ -133,7 +145,7 @@ class GatewayZibalController extends Controller
 
         $zibalAttempt->attemptSucceed();
 
-        tbeLog('gateway-zibal')->info('Zibal payment verified', [
+        tbeLog('gateway-zibal')->for($invoice->botUser)->info('Zibal payment {track_id} verified for invoice #{invoice_id}: {received_amount} IRR', [
             'invoice_id' => $invoice->getKey(),
             'track_id' => $zibalAttempt->track_id,
             'received_amount' => $result['amount'],
@@ -154,8 +166,23 @@ class GatewayZibalController extends Controller
     {
         tenancy()->initialize($invoice->bot);
         wHook()->setBot($invoice->bot);
-        wHook()->setApi(new Api($invoice->bot->bot_token));
+        wHook()->setApi(telegramApi($this->botToken($invoice)));
         wHook()->setUser($invoice->botUser);
         wHook()->setUpdate(Update::make(request()->all()));
+    }
+
+    /** A scalar field of a Zibal response, as a string; null when absent. */
+    private function field(mixed $response, string $key): ?string
+    {
+        $value = is_array($response) ? ($response[$key] ?? null) : null;
+
+        return is_scalar($value) ? (string) $value : null;
+    }
+
+    private function botToken(Invoice $invoice): string
+    {
+        $token = $invoice->bot?->getAttribute('bot_token');
+
+        return is_string($token) ? $token : '';
     }
 }
