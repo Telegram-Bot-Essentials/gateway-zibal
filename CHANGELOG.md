@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.16] - 2026-10-01
+
 ### Changed
 
 - Reworded the user-facing English and Persian strings to read more naturally; no keys or placeholders changed.
