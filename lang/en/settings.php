@@ -5,8 +5,8 @@ return [
         'billing' => 'Billing',
         'gateways' => 'Gateways',
         'zibal' => 'Zibal',
-        'status' => 'Zibal Status',
-        'merchant' => 'Zibal Merchant',
+        'status' => 'Zibal status',
+        'merchant' => 'Zibal merchant',
     ],
 
     'descriptions' => [
@@ -18,6 +18,6 @@ return [
     ],
 
     'alerts' => [
-        'merchant' => "Zibal refused to start a payment because of the merchant id ([:code] :message). Members can't pay through Zibal until it is fixed in the Zibal gateway settings.",
+        'merchant' => "Zibal refused to start a payment because of the merchant ID ([:code] :message). Members can't pay through Zibal until it is fixed in the Zibal gateway settings.",
     ],
 ];
