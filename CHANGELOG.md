@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.19] - 2026-10-31
+
 ### Changed
 
 - Requires essence 0.19.
