@@ -6,6 +6,13 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.20] - 2026-10-31
+
+### Fixed
+
+- Requires essence 0.19.0-beta.2 or later; 0.19.0-beta.1 still had the
+  permission API.
+
 ## [0.0.19] - 2026-10-31
 
 ### Changed
