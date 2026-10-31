@@ -46,7 +46,7 @@ class GatewayZibalController extends Controller
             // 102-104: the merchant id is unknown, inactive or invalid - no
             // member can pay through Zibal until the owner fixes it.
             if (in_array($code, ['102', '103', '104'], true)) {
-                adminAlert('gateway-zibal.merchant', fn () => __('tbe-gateway-zibal::settings.alerts.merchant', [
+                ownerAlert('gateway-zibal.merchant', fn () => __('tbe-gateway-zibal::settings.alerts.merchant', [
                     'code' => $code,
                     'message' => $zibalMessage,
                 ]));
