@@ -75,7 +75,9 @@
         </div>
     @endif
 
-    <a href="{{$botLink}}" class="telegram-button">Return to Telegram</a>
+    @if($botLink)
+        <a href="{{$botLink}}" class="telegram-button">Return to Telegram</a>
+    @endif
 </div>
 </body>
 </html>
