@@ -6,6 +6,14 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Fixed
+
+- A verified payment is marked paid even when Telegram cannot be reached to build the link back to the bot. It used to stay pending, with the customer already charged.
+
+### Security
+
+- The callback only settles an invoice with the tracking id started for that invoice, and only when Zibal verified the expected amount. Before, a payment could be presented against any invoice, so a small payment could settle a larger one.
+
 ## [0.0.21] - 2026-10-31
 
 ### Changed
