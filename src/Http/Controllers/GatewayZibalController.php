@@ -2,6 +2,7 @@
 
 namespace TelegramBotEssentials\GatewayZibal\Http\Controllers;
 
+use Brick\Math\BigDecimal;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\ConnectionException;
@@ -11,9 +12,9 @@ use Illuminate\Routing\Controller;
 use Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedById;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use Telegram\Bot\Objects\Update;
-use TelegramBotEssentials\Billing\Models\Abstract\PaymentAttempt;
 use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
+use TelegramBotEssentials\Essence\Models\Bot;
 use TelegramBotEssentials\GatewayZibal\Models\ToZibalAttempt;
 
 class GatewayZibalController extends Controller
@@ -90,72 +91,94 @@ class GatewayZibalController extends Controller
             'trackId' => 'required',
         ]);
 
-        $result = zibal()->verify($request->input('trackId'))->execute();
+        // Settle first: the customer has paid, and nothing about the way back
+        // to Telegram may stand between a verified payment and the invoice.
+        $success = $this->settle($invoice, (string) $request->string('trackId'));
 
-        try {
-            $api = telegramApi($this->botToken($invoice));
-            $me = $api->getMe();
-            $username = $me->username;
-        } catch (TelegramSDKException $e) {
-            tbeLog('gateway-zibal')->for($invoice->botUser)->error('Invoice #{invoice_id} paid, but the bot username for the redirect could not be resolved: '.$e->getMessage(), ['exception' => $e, 'invoice_id' => $invoice->getKey()]);
+        return view('tbe-gateway-zibal::result', [
+            'success' => $success ? 1 : 0,
+            'invoice' => $invoice,
+            'botLink' => $this->botLink($invoice),
+        ]);
+    }
 
-            return tbeApiResponse()->error('Payment was successful, but unable to redirect to Telegram', 200);
+    /**
+     * Marks the invoice paid if Zibal verified this invoice's own payment in
+     * full; whether it is paid. The tracking id arrives from the browser, and
+     * Zibal only says that it was paid: without the two checks here, a small
+     * payment could settle a larger invoice.
+     *
+     * @throws ConnectionException
+     */
+    private function settle(Invoice $invoice, string $trackId): bool
+    {
+        if ($invoice->getAttribute('status') === 'paid') {
+            return true;
         }
 
-        $botLink = 'https://t.me/'.$username.'?start=invoice_'.$invoice->id;
+        $zibalAttempt = $invoice->paymentAttempt;
 
-        if ($invoice->status == 'paid') {
-            return view('tbe-gateway-zibal::result', [
-                'success' => 1,
-                'invoice' => $invoice,
-                'botLink' => $botLink,
+        if (! ($zibalAttempt instanceof ToZibalAttempt) || $this->text($zibalAttempt->getAttribute('track_id')) !== $trackId) {
+            tbeLog('gateway-zibal')->for($invoice->botUser)->warning('Refused payment {track_id} for invoice #{invoice_id}: it is not the payment started for this invoice', [
+                'invoice_id' => $invoice->getKey(),
+                'track_id' => $trackId,
             ]);
+
+            return false;
         }
+
+        $result = zibal()->verify($trackId)->execute();
 
         if (($result['status'] ?? null) != 1) {
             tbeLog('gateway-zibal')->for($invoice->botUser)->warning('Zibal did not verify payment {track_id} of invoice #{invoice_id}: [{status}] {zibal_message}', [
                 'invoice_id' => $invoice->getKey(),
                 'zibal_message' => $this->field($result, 'message') ?? 'no message',
-                'track_id' => $request->input('trackId'),
+                'track_id' => $trackId,
                 'status' => $result['status'] ?? null,
             ]);
 
-            return view('tbe-gateway-zibal::result', [
-                'success' => 0,
-                'invoice' => $invoice,
-                'botLink' => $botLink,
-            ]);
+            return false;
         }
 
-        if (
-            ! ($invoice->paymentAttempt instanceof ToZibalAttempt) ||
-            ! ($invoice->paymentAttempt instanceof PaymentAttempt)
-        ) {
-            return view('tbe-gateway-zibal::result', [
-                'success' => 0,
-                'invoice' => $invoice,
-                'botLink' => $botLink,
+        $received = $this->field($result, 'amount');
+
+        $expected = $this->text($zibalAttempt->getAttribute('amount'));
+
+        if (! is_numeric($received) || ! is_numeric($expected) || BigDecimal::of($received)->compareTo(BigDecimal::of($expected)) !== 0) {
+            tbeLog('gateway-zibal')->for($invoice->botUser)->error('Refused payment {track_id} for invoice #{invoice_id}: Zibal verified {received_amount} IRR, expected {amount} IRR', [
+                'invoice_id' => $invoice->getKey(),
+                'track_id' => $trackId,
+                'received_amount' => $received,
+                'amount' => $expected,
             ]);
+
+            return false;
         }
 
-        $zibalAttempt = $invoice->paymentAttempt;
         $zibalAttempt->update([
-            'received_amount' => $result['amount'],
+            'received_amount' => $received,
         ]);
 
         $zibalAttempt->attemptSucceed();
 
         tbeLog('gateway-zibal')->for($invoice->botUser)->info('Zibal payment {track_id} verified for invoice #{invoice_id}: {received_amount} IRR', [
             'invoice_id' => $invoice->getKey(),
-            'track_id' => $zibalAttempt->track_id,
-            'received_amount' => $result['amount'],
+            'track_id' => $trackId,
+            'received_amount' => $received,
         ]);
 
-        return view('tbe-gateway-zibal::result', [
-            'success' => 1,
-            'invoice' => $invoice,
-            'botLink' => $botLink,
-        ]);
+        return true;
+    }
+
+    /** The way back to the bot; null when its username cannot be resolved right now. */
+    private function botLink(Invoice $invoice): ?string
+    {
+        $bot = $invoice->bot;
+        $username = $bot instanceof Bot ? $bot->username() : null;
+
+        $id = $invoice->getKey();
+
+        return $username === null || ! is_scalar($id) ? null : 'https://t.me/'.$username.'?start=invoice_'.$id;
     }
 
     /**
@@ -177,6 +200,11 @@ class GatewayZibalController extends Controller
         $value = is_array($response) ? ($response[$key] ?? null) : null;
 
         return is_scalar($value) ? (string) $value : null;
+    }
+
+    private function text(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
     }
 
     private function botToken(Invoice $invoice): string
